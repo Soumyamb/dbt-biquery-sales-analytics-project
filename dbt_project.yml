@@ -1,0 +1,36 @@
+name: 'dbt_project'
+version: '1.0.0'
+
+profile: 'bigquery_project'  # This should match the profile name in profiles.yml
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+models:
+  dbt_project:
+
+    staging:
+      +schema: staging
+      +materialized: view
+      marts:
+        +materialized: table
+
+    intermediate:
+      +schema: intermediate
+      +materialized: ephemeral  # or view if you want persistence
+      marts:
+        +materialized: view
+
+    dm:
+      +schema: datamart
+      +materialized: table
+      marts:
+        +materialized: table

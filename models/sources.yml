@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: marketing_test
+    description: "The marketing datawarehouse dataset"
+    tables:
+      - name: customers_data
+        description: "Customer data table in B2B sales DWH"
+        
+      - name: image_sales
+        description: "image sales invoices"

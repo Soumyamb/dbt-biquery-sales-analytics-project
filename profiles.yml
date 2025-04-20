@@ -1,0 +1,12 @@
+bigquery_project:  # this should match your `profile:` in dbt_project.yml
+
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: modern-optics-449413-t5
+      dataset: marketing_test
+      keyfile: C:\Users\soumy\Downloads\modern-optics-449413-t5-dfbef504008b.json
+      threads: 1
+      location: US
