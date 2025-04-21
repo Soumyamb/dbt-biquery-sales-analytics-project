@@ -27,10 +27,14 @@ models:
       +schema: intermediate
       +materialized: ephemeral  # or view if you want persistence
       marts:
-        +materialized: view
+        +materialized: table
 
     dm:
       +schema: datamart
       +materialized: table
       marts:
         +materialized: table
+    
+    stg_customers:
+      +materialized: incremental
+      +unique_key: customer_id

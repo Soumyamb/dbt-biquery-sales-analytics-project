@@ -1,4 +1,11 @@
+-- This model is incremental: new rows based on invoice_id will be inserted
+{{ config( 
+    materialized = 'incremental',
+    unique_key = 'invoice_id'
+) }}
+
 WITH image_invoices_cleaned AS (
+
     SELECT 
         invoice_no AS invoice_id,
         invoice_date,
@@ -21,8 +28,17 @@ WITH image_invoices_cleaned AS (
             WHEN shopping_mall = 'Viaport Outlet' THEN 'Nora Schmidt'
             WHEN shopping_mall = 'Zorlu Center' THEN 'Olivier Martin'
             ELSE 'Unknown'
-        END AS employee_name     
-    FROM {{ source('marketing_test', 'image_sales') }}  -- Use source function to reference the source table
+        END AS employee_name
+
+    FROM {{ source('marketing_test', 'image_sales') }}
+
+    {% if is_incremental() %}
+        -- Only include new records based on invoice_id
+        WHERE invoice_no NOT IN (
+            SELECT invoice_id FROM {{ this }}
+        )
+    {% endif %}
+
 )
 
 SELECT * 
